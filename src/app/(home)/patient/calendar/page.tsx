@@ -1,7 +1,7 @@
 import CalendarView from "@/components/calendar/Calendar";
 import React from "react";
 
-const page = () => {
+const Page = () => {
   return (
     <div className="w-full h-full">
       <CalendarView />
@@ -9,4 +9,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

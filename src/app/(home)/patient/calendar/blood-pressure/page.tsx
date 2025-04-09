@@ -3,7 +3,7 @@ import WebcamComponent from "@/components/webcam/Webcam";
 import React from "react";
 import GuidanceMessage from "@/components/webcam/GuidanceMessage";
 
-const page = () => {
+const Page = () => {
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="flex-2 flex flex-col justify-center items-center gap-10">
@@ -17,4 +17,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
