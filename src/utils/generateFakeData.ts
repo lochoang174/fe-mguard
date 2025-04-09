@@ -65,6 +65,7 @@ export const generateFakeData = (): BloodPressureRecord[] => {
       diastolic,
       heartRate,
       status,
+      //@ts-ignore
       note,
     });
   });

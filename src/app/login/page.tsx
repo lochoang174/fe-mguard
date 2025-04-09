@@ -5,8 +5,10 @@ import logo from "@/assets/logo.png";
 
 const Login = () => {
   const handleGoogleLogin = async () => {
+    //@ts-ignore
+    const url = process.env.NEXT_PUBLIC_API_URL;
     try {
-      window.location.href = "https://devarena.store/api/auth/google";
+      window.location.href = `${url}/auth/google`;
     } catch (error) {
       console.error("Error during Google login:", error);
     }

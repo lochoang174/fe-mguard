@@ -1,15 +1,16 @@
 "use client";
-import WebcamComponent from "@/components/webcam/Webcam";
+
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 
 const Page = () => {
-  const router =useRouter()
-  router.push("/patient/calendar")
-  return (
-    <div>
-    </div>
-  );
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push("/patient/calendar");
+  }, [router]);
+
+  return <div />;
 };
 
 export default Page;
