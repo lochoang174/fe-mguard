@@ -1,0 +1,88 @@
+.calendar-container {
+  height: 600px;
+  border-radius: 10px;
+}
+
+/* Tùy chỉnh header của calendar */
+.rbc-header {
+  padding: 10px 3px;
+  font-weight: bold;
+  background-color: #f8f9fa;
+}
+
+/* Tùy chỉnh today cell */
+.rbc-today {
+  background-color: #e8f4ff !important;
+}
+
+/* Tùy chỉnh event */
+.rbc-event {
+  border-radius: 6px !important;
+  padding: 4px 8px !important;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  border: none !important;
+  cursor: pointer;
+}
+
+.rbc-event:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Normal status event */
+.rbc-event[data-status="normal"] {
+  background-color: #dcfce7 !important;
+  color: #166534;
+}
+
+/* Warning status event */
+.rbc-event[data-status="warning"] {
+  background-color: #fef3c7 !important;
+  color: #92400e;
+}
+
+/* Danger status event */
+.rbc-event[data-status="danger"] {
+  background-color: #fee2e2 !important;
+  color: #991b1b;
+}
+
+/* Tùy chỉnh toolbar */
+.rbc-toolbar {
+  margin-bottom: 20px !important;
+}
+
+.rbc-toolbar button {
+  background-color: white;
+  border: 1px solid #ddd;
+  color: #333;
+  padding: 6px 12px;
+  border-radius: 4px;
+  margin-right: 5px;
+}
+
+.rbc-toolbar button:hover {
+  background-color: #f8f9fa;
+}
+
+.rbc-toolbar button.rbc-active {
+  background-color: #3174ad;
+  color: white;
+}
+
+/* Tùy chỉnh cell */
+.rbc-month-view {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.rbc-day-bg {
+  transition: background-color 0.2s;
+}
+
+.rbc-day-bg:hover {
+  background-color: #f8f9fa;
+}
