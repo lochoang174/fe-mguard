@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { io } from "socket.io-client";
 
 // Cấu hình socket với các options cần thiết
-const socket = io("http://localhost:3001", {
+const socket = io("https://devarena.store", {
   transports: ["websocket", "polling"],
   path: "/socket.io/",
   reconnection: true,
