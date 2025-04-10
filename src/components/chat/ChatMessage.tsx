@@ -9,6 +9,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Message } from "@/types/message";
+import { MDComponents } from "@/components/markdown/MDComponents";
+import MDContent from "../markdown";
 
 interface ChatMessageProps {
   message: Message;
@@ -18,11 +20,9 @@ interface ChatMessageProps {
 const ChatMessage = ({ message, onRetry }: ChatMessageProps) => {
   const { user } = useAuth();
 
-  const handleCopy = async () => {
+  const handleCopy = async () => {};
 
-  };
-
-  console.log(message)
+  console.log(message);
   if (!message.isUser && message.isLoading) {
     return (
       <div className="flex gap-3">
@@ -75,7 +75,7 @@ const ChatMessage = ({ message, onRetry }: ChatMessageProps) => {
           ) : (
             <div className="prose prose-sm max-w-none">
               <AIWriter>
-                <ReactMarkdown>{message.content}</ReactMarkdown>
+                <MDContent>{message.content}</MDContent>
               </AIWriter>
             </div>
           )}

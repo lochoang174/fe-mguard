@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useRef, useState, useEffect } from "react";
 import Webcam from "react-webcam";
 import { Button } from "@/components/ui/button";
 import { useSocket } from "@/hooks/useSocket";
@@ -8,34 +8,47 @@ import { Video, VideoOff, Camera } from "lucide-react";
 
 const WebcamComponent = () => {
   const webcamRef = useRef<Webcam>(null);
-  const [lastImage, setLastImage] = useState<string | null>(null);
   const [isCameraOn, setIsCameraOn] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
   const { socket, isConnected } = useSocket();
 
-  // Hàm chụp và gửi frame từ webcam
-  const captureAndSendFrame = useCallback(() => {
-    if (!socket || !isConnected) {
-      console.error("Socket is not connected");
-      return false;
+  // Hàm gửi frame từ webcam
+  const sendFrame = useCallback(() => {
+    if (!socket || !isConnected || !isRecording) {
+      return;
     }
 
     if (webcamRef.current) {
       const imageSrc = webcamRef.current.getScreenshot();
       if (imageSrc) {
-        // Loại bỏ tiền tố nếu cần thiết
         const base64Data = imageSrc.split(",")[1] || imageSrc;
-
-        // Gửi base64 image đến server
         socket.emit("webcam-frame", base64Data);
-        setLastImage(imageSrc);
-        return true;
       }
     }
-    return false;
-  }, [socket, isConnected]);
+  }, [socket, isConnected, isRecording]);
+
+  // Gửi frame liên tục khi đang recording
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+    if (isRecording) {
+      intervalId = setInterval(sendFrame, 1000); // Gửi mỗi giây
+    }
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [isRecording, sendFrame]);
 
   const toggleCamera = useCallback(() => {
     setIsCameraOn((prev) => !prev);
+    if (isRecording) {
+      setIsRecording(false);
+    }
+  }, [isRecording]);
+
+  const toggleRecording = useCallback(() => {
+    setIsRecording((prev) => !prev);
   }, []);
 
   return (
@@ -75,25 +88,16 @@ const WebcamComponent = () => {
         </Button>
 
         <Button
-          onClick={captureAndSendFrame}
+          onClick={toggleRecording}
           disabled={!isConnected || !isCameraOn}
-          className="flex items-center gap-2"
+          className={`flex items-center gap-2 ${
+            isRecording ? "bg-red-500 hover:bg-red-600" : ""
+          }`}
         >
           <Camera className="h-4 w-4" />
-          Bắt đầu đo
+          {isRecording ? "Dừng đo" : "Bắt đầu đo"}
         </Button>
       </div>
-
-      {lastImage && (
-        <div className="mt-4">
-          <h3 className="mb-2 text-sm font-medium">Ảnh đã chụp:</h3>
-          <img
-            src={lastImage}
-            alt="Last captured"
-            className="rounded-lg border border-gray-200"
-          />
-        </div>
-      )}
     </div>
   );
 };

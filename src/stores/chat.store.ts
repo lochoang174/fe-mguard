@@ -12,17 +12,19 @@ interface ChatState {
   setError: (error: string | null) => void;
   clearMessages: () => void;
   retryLastMessage: () => string | undefined;
-  setResponseMessage: (messageId: string, responseText: string ) => void;
+  setResponseMessage: (messageId: string, responseText: string) => void;
 }
 
 export const useChatStore = create<ChatState>((set, get) => ({
-  messages: [{
-    id: "1",
-    content: "Xin chào, tôi là AI, tôi có thể giúp bạn gì?",
-    isUser: false,
-    isLoading: false,
-    timestamp: new Date(),
-  }],
+  messages: [
+    {
+      id: "1",
+      content: "Xin chào, tôi là AI, tôi có thể giúp bạn gì?",
+      isUser: false,
+      isLoading: false,
+      timestamp: new Date(),
+    },
+  ],
   isLoading: false,
   error: null,
   inputMessage: "",
@@ -31,8 +33,8 @@ export const useChatStore = create<ChatState>((set, get) => ({
   addMessage: (content: string, isUser: boolean) => {
     const id = uuidv4();
     const isLoading = !isUser;
-    console.log("isUser: "+isUser)
-    console.log("isLoading: "+isLoading)
+    console.log("isUser: " + isUser);
+    console.log("isLoading: " + isLoading);
     const newMessage: Message = {
       id,
       content,
@@ -40,7 +42,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
       isLoading: isLoading,
       timestamp: new Date(),
     };
-    console.log(newMessage)
+    console.log(newMessage);
 
     set((state) => ({
       messages: [...state.messages, newMessage],
@@ -48,19 +50,20 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
     return id;
   },
-  setResponseMessage: (messageId: string, responseText: string ) => {
+  setResponseMessage: (messageId: string, responseText: string) => {
     set((state) => ({
       messages: state.messages.map((msg) => {
         if (msg.id === messageId) {
-          return { ...msg, isLoading: false, content: responseText };
+          return {
+            ...msg,
+            isLoading: false,
+            content: msg.content + responseText,
+          };
         }
-        console.log("id: "+ msg.id)
-        console.log(messageId)
         return msg;
       }),
     }));
   },
-  
 
   setError: (error: string | null) => set({ error }),
 

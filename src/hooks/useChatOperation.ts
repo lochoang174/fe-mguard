@@ -1,5 +1,6 @@
 import { useChatStore } from "@/stores/chat.store";
 import useSocket from "./useSocket";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const useChatOperations = () => {
     const {
@@ -15,6 +16,7 @@ export const useChatOperations = () => {
     } = useChatStore();
   
     const { sendMessage: socketSendMessage, isConnected } = useSocket();
+    const {user}= useAuth()
   
     const sendMessage = async () => {
       if (!isConnected) {
@@ -32,7 +34,7 @@ export const useChatOperations = () => {
         // Add a loading message from bot
 
         // Send message through socket
-        socketSendMessage(inputMessage,id);
+        socketSendMessage(inputMessage,id,user?._id||"");
   
         // Note: We don't need to handle the response here
         // The socket listener in useSocket will handle the response

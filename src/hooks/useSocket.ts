@@ -69,13 +69,14 @@ export const useSocket = () => {
   }, [setResponseMessage]);
 
   const sendMessage = useCallback(
-    (message: string, id: string) => {
+    (message: string, idMessage: string, idUser: string) => {
       if (socket && socket.connected) {
-        console.log("Sending message:", { id, message });
+        console.log("Sending message:", { idMessage, message });
         socket.emit("sendMessage", {
-          id,
-          text: message,
+          idMessage,
+          message: message,
           timestamp: new Date(),
+          idUser,
         });
       } else {
         console.error("Socket not connected. Current state:", {
