@@ -7,7 +7,7 @@ const Page = () => {
   const router = useRouter();
 
   useEffect(() => {
-    router.push("/patient/calendar");
+    router.push("/patient/blood-pressure");
   }, [router]);
 
   return <div />;

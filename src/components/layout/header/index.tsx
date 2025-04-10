@@ -16,7 +16,7 @@ const HeaderLayout = () => {
   const router = useRouter();
 
   const handleMeasurement = () => {
-    router.push("/patient/calendar/blood-pressure");
+    router.push("/patient/blood-pressure");
   };
 
   return (

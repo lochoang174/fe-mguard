@@ -1,28 +1,45 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { useChatStore } from "@/stores/chat.store";
 
-let socket: Socket;
+const SOCKET_URL =
+  process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001";
 
 export const useSocket = () => {
   const { addMessage, setResponseMessage } = useChatStore();
+  const [isConnected, setIsConnected] = useState(false);
+  const [socket, setSocket] = useState<Socket | null>(null);
 
-  const initializeSocket = useCallback(() => {
-    const SOCKET_URL =
-      process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001";
-    socket = io(SOCKET_URL);
+  // Initialize socket connection
+  useEffect(() => {
+    console.log("Initializing socket connection to:", SOCKET_URL);
 
-    socket.on("connect", () => {
-      console.log("Connected to socket server");
+    const newSocket = io(SOCKET_URL, {
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
     });
 
-    socket.on("disconnect", () => {
-      console.log("Disconnected from socket server");
+    setSocket(newSocket);
+
+    newSocket.on("connect", () => {
+      console.log("Socket connected successfully. Socket ID:", newSocket.id);
+      setIsConnected(true);
     });
 
-    socket.on(
+    newSocket.on("connect_error", (error) => {
+      console.error("Socket connection error:", error.message);
+      setIsConnected(false);
+    });
+
+    newSocket.on("disconnect", (reason) => {
+      console.log("Socket disconnected. Reason:", reason);
+      setIsConnected(false);
+    });
+
+    newSocket.on(
       "messageResponse",
       (data: {
         id: string;
@@ -31,48 +48,50 @@ export const useSocket = () => {
         fromServer: boolean;
       }) => {
         if (data.fromServer) {
-          console.log("data.text: "+data.text)
-          console.log("data.id: "+data.id)
-          // Update the loading message or add a new one
-          // addMessage(data.text, false);
-          // setLoading(false,data.id);
-          setResponseMessage(data.id,data.text);
+          console.log("Received message response:", {
+            id: data.id,
+            text: data.text,
+            timestamp: data.timestamp,
+          });
+          setResponseMessage(data.id, data.text);
         }
       }
     );
 
-    socket.on("error", (error: string) => {
+    newSocket.on("error", (error: string) => {
       console.error("Socket error:", error);
     });
 
     return () => {
-      socket.disconnect();
+      console.log("Cleaning up socket connection");
+      newSocket.disconnect();
     };
-    }, [addMessage]);
+  }, [setResponseMessage]);
 
-  const sendMessage = useCallback((message: string,id:string) => {
-    if (socket && socket.connected) {
-      socket.emit("sendMessage", {
-        id,
-        text: message,
-        timestamp: new Date(),
-      });
-    } else {
-      console.error("Socket not connected");
-    }
-  }, []);
-
-  useEffect(() => {
-    const cleanup = initializeSocket();
-    return () => {
-      cleanup();
-    };
-  }, [initializeSocket]);
+  const sendMessage = useCallback(
+    (message: string, id: string) => {
+      if (socket && socket.connected) {
+        console.log("Sending message:", { id, message });
+        socket.emit("sendMessage", {
+          id,
+          text: message,
+          timestamp: new Date(),
+        });
+      } else {
+        console.error("Socket not connected. Current state:", {
+          socketExists: !!socket,
+          isConnected: socket?.connected,
+          socketId: socket?.id,
+        });
+      }
+    },
+    [socket]
+  );
 
   return {
     socket,
     sendMessage,
-    isConnected: socket?.connected || false,
+    isConnected,
   };
 };
 

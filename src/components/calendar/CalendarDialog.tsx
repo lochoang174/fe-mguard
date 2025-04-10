@@ -33,7 +33,7 @@ export const CalendarDialog = ({
 
   const handleMeasureBloodPressure = () => {
     // TODO: Implement blood pressure measurement
-    router.push("/patient/calendar/blood-pressure");
+    router.push("/patient/blood-pressure");
   };
 
   return (
