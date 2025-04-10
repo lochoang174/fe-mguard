@@ -58,14 +58,14 @@ export const CalendarDialog = ({
             onClick={handleAIConsultation}
           >
             <MessageSquare className="h-4 w-4" />
-            AI Consultation
+            AI Tư Vấn
           </Button>
           <Button
             className="flex items-center gap-2"
             onClick={handleMeasureBloodPressure}
           >
             <Activity className="h-4 w-4" />
-            Measure Blood Pressure
+            Đo Huyết Áp
           </Button>
         </DialogFooter>
       </DialogContent>

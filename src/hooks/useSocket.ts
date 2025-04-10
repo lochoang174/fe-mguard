@@ -1,77 +1,78 @@
-import { useState, useEffect, useCallback } from "react";
-import { io } from "socket.io-client";
+"use client";
 
-// Cấu hình socket với các options cần thiết
-const socket = io("https://devarena.store", {
-  transports: ["websocket", "polling"],
-  path: "/socket.io/",
-  reconnection: true,
-  reconnectionAttempts: 5,
-  reconnectionDelay: 1000,
-});
+import { useEffect, useCallback } from "react";
+import { io, Socket } from "socket.io-client";
+import { useChatStore } from "@/stores/chat.store";
 
-interface UseSocketProps {
-  onConnect?: () => void;
-  onDisconnect?: (reason: string) => void;
-  onReconnect?: () => void;
-}
+let socket: Socket;
 
-export const useSocket = ({
-  onConnect,
-  onDisconnect,
-  onReconnect,
-}: UseSocketProps = {}) => {
-  const [connected, setConnected] = useState(socket.connected);
+export const useSocket = () => {
+  const { addMessage, setResponseMessage } = useChatStore();
+
+  const initializeSocket = useCallback(() => {
+    const SOCKET_URL =
+      process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001";
+    socket = io(SOCKET_URL);
+
+    socket.on("connect", () => {
+      console.log("Connected to socket server");
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Disconnected from socket server");
+    });
+
+    socket.on(
+      "messageResponse",
+      (data: {
+        id: string;
+        text: string;
+        timestamp: string;
+        fromServer: boolean;
+      }) => {
+        if (data.fromServer) {
+          console.log("data.text: "+data.text)
+          console.log("data.id: "+data.id)
+          // Update the loading message or add a new one
+          // addMessage(data.text, false);
+          // setLoading(false,data.id);
+          setResponseMessage(data.id,data.text);
+        }
+      }
+    );
+
+    socket.on("error", (error: string) => {
+      console.error("Socket error:", error);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+    }, [addMessage]);
+
+  const sendMessage = useCallback((message: string,id:string) => {
+    if (socket && socket.connected) {
+      socket.emit("sendMessage", {
+        id,
+        text: message,
+        timestamp: new Date(),
+      });
+    } else {
+      console.error("Socket not connected");
+    }
+  }, []);
 
   useEffect(() => {
-    // Kết nối thành công
-    socket.on("connect", () => {
-      setConnected(true);
-      console.log("Đã kết nối với server");
-      onConnect?.();
-    });
-
-    // Ngắt kết nối
-    socket.on("disconnect", (reason) => {
-      setConnected(false);
-      console.log("Đã ngắt kết nối:", reason);
-      onDisconnect?.(reason);
-    });
-
-    // Kết nối lại thành công
-    socket.on("reconnect", () => {
-      console.log("Đã kết nối lại với server");
-      onReconnect?.();
-    });
-
-    // Cleanup function to remove listeners when the component is unmounted
+    const cleanup = initializeSocket();
     return () => {
-      socket.off("connect");
-      socket.off("disconnect");
-      socket.off("reconnect");
+      cleanup();
     };
-  }, [onConnect, onDisconnect, onReconnect]);
-
-  // Gửi dữ liệu đến server
-  const emit = useCallback(
-    (event: string, data: any, callback?: (response: any) => void) => {
-      if (socket.connected) {
-        socket.emit(event, data, callback);
-        return true;
-      }
-      return false;
-    },
-    []
-  );
-
-  // Kiểm tra trạng thái kết nối
-  const isConnected = useCallback(() => socket.connected, []);
+  }, [initializeSocket]);
 
   return {
     socket,
-    connected,
-    emit,
-    isConnected,
+    sendMessage,
+    isConnected: socket?.connected || false,
   };
 };
 

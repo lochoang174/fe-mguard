@@ -121,8 +121,8 @@ const Page = () => {
   };
 
   return (
-    <div className="container mx-auto py-4 px-2">
-      <div className="bg-white/40 backdrop-blur-3xl rounded-lg p-6 shadow-lg border border-white/20">
+    <div className="w-[70%] mx-auto py-4 px-2">
+      <div className="bg-white/20 backdrop-blur-3xl rounded-lg p-6 shadow-lg border border-white/60">
         <h1 className="text-2xl font-bold mb-6">Thông tin bệnh nhân</h1>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -171,7 +171,7 @@ const Page = () => {
                   name="birthDate"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel>Ngày sinh</FormLabel>
+                      <FormLabel>Ngày sinh con</FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
                           <FormControl>
@@ -304,7 +304,7 @@ const Page = () => {
               </div>
             </div>
 
-            <div className="mt-6">
+            <div className="mt-6 flex justify-end">
               <Button type="submit" className="w-[200px]" disabled={isLoading}>
                 {isLoading ? "Đang lưu..." : "Lưu thông tin"}
               </Button>

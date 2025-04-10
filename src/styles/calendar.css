@@ -1,6 +1,8 @@
 .calendar-container {
   height: 600px;
   border-radius: 10px;
+  padding-left: 24px;
+  padding-right: 24px;
 }
 
 /* Tùy chỉnh header của calendar */

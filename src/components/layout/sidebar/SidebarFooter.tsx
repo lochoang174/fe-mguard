@@ -15,10 +15,10 @@ const SidebarFooter = () => {
         <Image src={user?.image || ''} alt='avatar' width={32} height={32} className='rounded-full' />
     </DropdownMenuTrigger>
     <DropdownMenuContent>
-      <DropdownMenuLabel>My Account</DropdownMenuLabel>
+      <DropdownMenuLabel>Tài Khoản</DropdownMenuLabel>
       <DropdownMenuSeparator />
       <DropdownMenuItem>{user?.email}</DropdownMenuItem>
-      <DropdownMenuItem>Logout</DropdownMenuItem>
+      <DropdownMenuItem>Đăng xuất</DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
   )

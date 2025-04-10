@@ -5,14 +5,15 @@ import { Button } from "../ui/button";
 interface ChatInputProps {
   value: string;
   onChange: (value: string) => void;
-  onSend: () => void;
+  onSend: () => Promise<void>;
 }
 
 const ChatInput = ({ value, onChange, onSend }: ChatInputProps) => {
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleKeyPress = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      onSend();
+      console.log("send: "+ value)
+      await onSend();
     }
   };
 

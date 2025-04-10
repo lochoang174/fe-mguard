@@ -8,9 +8,9 @@ import { Key } from "react";
 import { Calendar,MessageCircle,Info } from 'lucide-react';
 
 const navigations = [
-  { title: "Calendar", icon: <Calendar />, path: "/patient/calendar" },
+  { title: "Lịch", icon: <Calendar />, path: "/patient/calendar" },
   { title: "Chat", icon: <MessageCircle />, path: "/patient/chat" },
-  { title: "Profile", icon: <Info />, path: "/patient/info" },
+  { title: "Hồ Sơ", icon: <Info />, path: "/patient/info" },
 ];
 
 export default function SidebarBody() {

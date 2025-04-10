@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { XCircle, CheckCircle } from "lucide-react";
+import { toast } from "react-toastify";
 import {
   Dialog,
   DialogContent,
@@ -11,6 +12,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import axiosInstance from "@/api/axios";
+import { useRouter } from "next/navigation";
 
 interface Instruction {
   id: number;
@@ -21,17 +24,17 @@ interface Instruction {
 const instructions: Instruction[] = [
   {
     id: 1,
-    text: "Wear the blood pressure cuff correctly on your upper arm",
+    text: "Đeo vòng bít huyết áp đúng cách vào cánh tay trên",
     completed: false,
   },
   {
     id: 2,
-    text: "Sit in the correct position with your back straight and feet flat on the floor",
+    text: "Ngồi đúng tư thế với lưng thẳng và bàn chân đặt phẳng trên sàn",
     completed: false,
   },
   {
     id: 3,
-    text: "Remain silent and still during the measurement",
+    text: "Giữ im lặng và không cử động trong quá trình đo",
     completed: false,
   },
 ];
@@ -46,7 +49,7 @@ const Tutorial = () => {
     diastolic: "",
     heartRate: "",
   });
-
+  const router = useRouter();
   useEffect(() => {
     const timers = currentInstructions.map((_, index) => {
       return setTimeout(() => {
@@ -58,6 +61,10 @@ const Tutorial = () => {
           };
           return newInstructions;
         });
+        // toast.success(`Đã hoàn thành bước ${index + 1}!`, {
+        //   position: "top-right",
+        //   autoClose: 2000,
+        // });
       }, 3000 * (index + 1));
     });
 
@@ -71,6 +78,12 @@ const Tutorial = () => {
       (instruction) => instruction.completed
     );
     setAllCompleted(completed);
+    if (completed) {
+      toast.success("Đã hoàn thành tất cả các bước!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   }, [currentInstructions]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,10 +94,30 @@ const Tutorial = () => {
     }));
   };
 
-  const handleSubmit = () => {
-    // Handle measurement submission here
-    console.log("Measurement submitted:", measurement);
-    setIsDialogOpen(false);
+  const handleSubmit = async () => {
+    try {
+      const response = await axiosInstance.post("/heart-press", {
+        systolic: Number(measurement.systolic),
+        diastolic: Number(measurement.diastolic),
+        heartRate: Number(measurement.heartRate),
+      });
+
+      if (response.status === 201) {
+        toast.success("Đã gửi kết quả đo thành công!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+
+        setIsDialogOpen(false);
+        router.push("/patient/chat?type=consultation");
+      }
+      //@ts-ignore
+    } catch (error) {
+      toast.error("Có lỗi xảy ra khi gửi kết quả!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (
@@ -92,11 +125,10 @@ const Tutorial = () => {
       <div className="w-full max-w-md bg-transparent rounded-xl p-6 space-y-6 shadow-2xl">
         <div className="text-center space-y-2">
           <h1 className="text-2xl font-bold text-gray-800">
-            Blood Pressure Measurement Tutorial
+            Hướng dẫn đo huyết áp
           </h1>
           <p className="text-sm text-gray-500">
-            Please follow the steps below to measure your blood pressure
-            correctly.
+            Xin hãy làm theo chỉ dẫn của AI
           </p>
         </div>
 
@@ -123,9 +155,9 @@ const Tutorial = () => {
         {allCompleted && (
           <Button
             onClick={() => setIsDialogOpen(true)}
-            className="w-full bg-black hover:bg-gray-800 text-white"
+            className="w-full   text-white"
           >
-            Proceed to Measurement
+            Nhập kết quả đo
           </Button>
         )}
       </div>
@@ -172,9 +204,9 @@ const Tutorial = () => {
           </div>
           <DialogFooter>
             <Button variant="outlined" onClick={() => setIsDialogOpen(false)}>
-              Cancel
+              Hủy bỏ
             </Button>
-            <Button onClick={handleSubmit}>Submit</Button>
+            <Button onClick={handleSubmit}>Gửi kết quả</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
