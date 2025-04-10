@@ -80,7 +80,7 @@ const WebcamComponent = () => {
           className="flex items-center gap-2"
         >
           <Camera className="h-4 w-4" />
-          Chụp ảnh
+          Bắt đầu đo
         </Button>
       </div>
 
