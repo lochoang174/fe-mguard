@@ -24,16 +24,26 @@ interface Instruction {
 const instructions: Instruction[] = [
   {
     id: 1,
-    text: "Đeo vòng bít huyết áp đúng cách vào cánh tay trên",
+    text: "Không được ngồi vắt chéo chân",
     completed: false,
   },
   {
     id: 2,
-    text: "Ngồi đúng tư thế với lưng thẳng và bàn chân đặt phẳng trên sàn",
+    text: "Không được nói chuyện trong lúc đo",
     completed: false,
   },
   {
     id: 3,
+    text: "Đeo vòng bít huyết áp đúng cách vào cánh tay trên",
+    completed: false,
+  },
+  {
+    id: 4,
+    text: "Ngồi đúng tư thế với lưng thẳng và bàn chân đặt phẳng trên sàn",
+    completed: false,
+  },
+  {
+    id: 5,
     text: "Giữ im lặng và không cử động trong quá trình đo",
     completed: false,
   },
@@ -50,6 +60,7 @@ const Tutorial = () => {
     heartRate: "",
   });
   const router = useRouter();
+
   useEffect(() => {
     const timers = currentInstructions.map((_, index) => {
       return setTimeout(() => {
@@ -61,11 +72,7 @@ const Tutorial = () => {
           };
           return newInstructions;
         });
-        // toast.success(`Đã hoàn thành bước ${index + 1}!`, {
-        //   position: "top-right",
-        //   autoClose: 2000,
-        // });
-      }, 3000 * (index + 1));
+      }, 5000 * (index + 1)); // Mỗi instruction cách nhau 4 giây
     });
 
     return () => {
