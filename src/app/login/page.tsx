@@ -33,7 +33,7 @@ const Login = () => {
             </h1>
             <div className="space-y-2">
               <p className="text-gray-600 font-medium">
-                Người bạn đồng hành tin cậy trong hành trình thai kỳ
+                Người bạn đồng hành tin cậy trong hành trình hậu sản
               </p>
               {/* <p className="text-sm text-gray-500">
                 Theo dõi huyết áp thông minh - Bảo vệ sức khỏe mẹ bầu
@@ -44,7 +44,7 @@ const Login = () => {
 
         <Button
           onClick={handleGoogleLogin}
-          className="w-full py-6 text-base font-medium"
+          className="w-full py-3 text-base font-medium"
           variant="outlined"
         >
           <svg
