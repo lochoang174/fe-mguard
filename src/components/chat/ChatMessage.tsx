@@ -70,7 +70,7 @@ const ChatMessage = ({ message, onRetry }: ChatMessageProps) => {
             "rounded-2xl py-2 px-4",
             message.isUser
               ? "bg-[#f60384] text-white"
-              : "bg-white/40 shadow-sm"
+              : "bg-white/10 shadow-sm"
           )}
         >
           {message.isUser ? (
