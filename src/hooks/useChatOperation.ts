@@ -23,7 +23,7 @@ export const useChatOperations = () => {
       return;
     }
     // Add user message
-    addMessage(inputMessage, true);
+    addMessage("Hãy nhận xét về dữ liệu đo huyết áp mới nhất của tôi", true);
     const id = addMessage("", false);
 
     setInputMessage("");

@@ -19,8 +19,9 @@ const ChatMessage = ({ message, onRetry }: ChatMessageProps) => {
   const { user } = useAuth();
 
   const handleCopy = async () => {};
-
-  console.log(message);
+  if(message.content==="Hãy nhận xét về dữ liệu đo huyết áp mới nhất của tôi"){
+    return;
+  }
   if (!message.isUser && message.isLoading) {
     return (
       <div className="flex gap-3 ">

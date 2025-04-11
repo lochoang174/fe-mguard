@@ -17,13 +17,13 @@ interface ChatState {
 
 export const useChatStore = create<ChatState>((set, get) => ({
   messages: [
-    {
-      id: "1",
-      content: "Xin chào, tôi là AI, tôi có thể giúp bạn gì?",
-      isUser: false,
-      isLoading: false,
-      timestamp: new Date(),
-    },
+    // {
+    //   id: "1",
+    //   content: "Xin chào, tôi là AI, tôi có thể giúp bạn gì?",
+    //   isUser: false,
+    //   isLoading: false,
+    //   timestamp: new Date(),
+    // },
   ],
   isLoading: false,
   error: null,
