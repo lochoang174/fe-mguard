@@ -23,11 +23,11 @@ const ChatMessage = ({ message, onRetry }: ChatMessageProps) => {
   console.log(message);
   if (!message.isUser && message.isLoading) {
     return (
-      <div className="flex gap-3">
+      <div className="flex gap-3 ">
         <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
           <Bot className="w-8 h-8 text-pink-500" />
         </div>
-        <div className="flex-1 max-w-[80%] bg-white rounded-2xl p-4 shadow-sm">
+        <div className="flex-1 max-w-[40%] bg-white rounded-2xl p-4 shadow-sm">
           <div className="flex items-center gap-2">
             <div className="flex gap-1">
               <div className="w-2 h-2 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.3s]" />
@@ -70,13 +70,13 @@ const ChatMessage = ({ message, onRetry }: ChatMessageProps) => {
             "rounded-2xl py-2 px-4",
             message.isUser
               ? "bg-[#f60384] text-white"
-              : "bg-white/40 shadow-sm text-gray-800"
+              : "bg-white/40 shadow-sm"
           )}
         >
           {message.isUser ? (
             <p>{message.content}</p>
           ) : (
-            <div className="prose prose-sm max-w-none">
+            <div className="prose prose-sm max-w-none font-[500]">
               <AIWriter>
                 <MDContent>{message.content}</MDContent>
               </AIWriter>
