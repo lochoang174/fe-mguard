@@ -14,7 +14,7 @@ const menuItems = [
   },
   { title: "Lịch", icon: <Calendar />, path: "/patient/calendar" },
   { title: "Chat", icon: <MessageSquare />, path: "/patient/chat" },
-  { title: "Hồ Sơ", icon: <User />, path: "/patient/profile" },
+  { title: "Hồ Sơ", icon: <User />, path: "/patient/info" },
 ];
 
 export default function SidebarBody() {
