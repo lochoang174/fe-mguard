@@ -2,14 +2,12 @@
 
 import React, { memo } from "react";
 import AIWriter from "react-aiwriter";
-import ReactMarkdown from "react-markdown";
 import { Bot, Copy, ThumbsUp, ThumbsDown, RotateCcw } from "lucide-react";
 import Image from "next/image";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Message } from "@/types/message";
-import { MDComponents } from "@/components/markdown/MDComponents";
 import MDContent from "../markdown";
 
 interface ChatMessageProps {
@@ -30,9 +28,14 @@ const ChatMessage = ({ message, onRetry }: ChatMessageProps) => {
           <Bot className="w-8 h-8 text-pink-500" />
         </div>
         <div className="flex-1 max-w-[80%] bg-white rounded-2xl p-4 shadow-sm">
-          <p className="text-gray-600">
-            Vui lòng đợi, tôi đang tạo câu trả lời...
-          </p>
+          <div className="flex items-center gap-2">
+            <div className="flex gap-1">
+              <div className="w-2 h-2 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.3s]" />
+              <div className="w-2 h-2 bg-pink-500 rounded-full animate-bounce [animation-delay:-0.15s]" />
+              <div className="w-2 h-2 bg-pink-500 rounded-full animate-bounce" />
+            </div>
+            <p className="text-gray-600">Đang tạo câu trả lời...</p>
+          </div>
         </div>
       </div>
     );
